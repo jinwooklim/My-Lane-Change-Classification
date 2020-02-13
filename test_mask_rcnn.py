@@ -5,6 +5,8 @@ import numpy as np
 import os
 
 dir_name = os.path.join(os.getcwd(),'comma2k19_test')
+if not os.path.exists(dir_name):
+    os.mkdir(dir_name)
 image_path = os.path.join(dir_name, 'input')
 masked_image_path = os.path.join(dir_name, 'masked_images')
 if not os.path.exists(image_path):
