@@ -1,0 +1,6 @@
+comma2k19_test/input/**
+comma2k19_test/masked_images/**
+mask_rcnn_coco.h5
+.pyc
+__pycache__
+.idea/
