@@ -5,7 +5,7 @@ import parmap
 
 data_path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/'
 output_dir_path = os.path.join('/home/titan/hdd_ext/hdd2', 'comma2k19_preprocessed')
-NIGHT_THRESHOLD = 40.0
+night_threshold = 40.0
 
 
 def remove_none_dir(chunk, sub_chunk_list):
@@ -23,7 +23,7 @@ def extract_frame(input_path, image_path, only_day_scene=True):
 
     preview_path = os.path.join(path, 'preview.png')
     preview_img = cv2.imread(preview_path)
-    if np.mean(preview_img) < NIGHT_THRESHOLD:
+    if np.mean(preview_img) < night_threshold:
         return
 
     path = path.split(data_path)
