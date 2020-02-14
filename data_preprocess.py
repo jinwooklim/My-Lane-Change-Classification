@@ -5,6 +5,7 @@ import parmap
 from multiprocessing import Manager
 
 data_path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/'
+output_dir_path = os.path.join('/home/titan/hdd_ext/hdd2', 'comma2k19_preprocessed')
 NIGHT_THRES = 40.0
 
 def remove_none_dir(chunk, sub_chunk_list):
@@ -46,11 +47,10 @@ def extract_frame(input_path, image_path, only_day_scene=True):
 
 
 if __name__ == "__main__":
-    dir_name = os.path.join(os.getcwd(),'comma2k19_test')
-    if not os.path.exists(dir_name):
-        os.mkdir(dir_name)
-    image_path = os.path.join(dir_name, 'input')
-    masked_image_path = os.path.join(dir_name, 'masked_images')
+    if not os.path.exists(output_dir_path):
+        os.mkdir(output_dir_path)
+    image_path = os.path.join(output_dir_path, 'input')
+    masked_image_path = os.path.join(output_dir_path, 'masked_images')
     if not os.path.exists(image_path):
         os.mkdir(image_path)
     if not os.path.exists(masked_image_path):
