@@ -25,25 +25,26 @@ def extract_frame(input_path, image_path, only_day_scene=True):
     preview_img = cv2.imread(preview_path)
     if np.mean(preview_img) < night_threshold:
         return
+    else:
+        path = path.split(data_path)
+        path = path[1]
+        extract_path = os.path.join(image_path, path)
+        if not os.path.exists(extract_path):
+            os.makedirs(extract_path)
 
-    path = path.split(data_path)
-    path = path[1]
-    extract_path = os.path.join(image_path, path)
-    if not os.path.exists(extract_path):
-        os.makedirs(extract_path)
-
-    p = path.split('/')
-    print("Read Video : %s || %s || %s"%(p[0], p[1], p[2]))
-    hevc_video = cv2.VideoCapture(input_path)
-    id = 0
-    while(hevc_video.isOpened()):
-        ret, frame = hevc_video.read()
-        if ret == True:
-            cv2.imwrite(os.path.join(extract_path, '%06d.png'%(id)), frame)
-            id += 1
-        else:
-            break
-    hevc_video.release()
+        p = path.split('/')
+        print("Read Video : %s || %s || %s"%(p[0], p[1], p[2]))
+        hevc_video = cv2.VideoCapture(input_path)
+        id = 0
+        while(hevc_video.isOpened()):
+            ret, frame = hevc_video.read()
+            if ret == True:
+                cv2.imwrite(os.path.join(extract_path, '%06d.png'%(id)), frame)
+                id += 1
+            else:
+                break
+        hevc_video.release()
+        return
 
 
 if __name__ == "__main__":
