@@ -2,11 +2,11 @@ import os
 import numpy as np
 import cv2
 import parmap
-from multiprocessing import Manager
 
 data_path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/'
 output_dir_path = os.path.join('/home/titan/hdd_ext/hdd2', 'comma2k19_preprocessed')
-NIGHT_THRES = 40.0
+NIGHT_THRESHOLD = 40.0
+
 
 def remove_none_dir(chunk, sub_chunk_list):
     for sub_chunk in sub_chunk_list:
@@ -23,7 +23,7 @@ def extract_frame(input_path, image_path, only_day_scene=True):
 
     preview_path = os.path.join(path, 'preview.png')
     preview_img = cv2.imread(preview_path)
-    if np.mean(preview_img) < NIGHT_THRES:
+    if np.mean(preview_img) < NIGHT_THRESHOLD:
         return
 
     path = path.split(data_path)
@@ -68,7 +68,6 @@ if __name__ == "__main__":
                 video_path = os.path.join(data_path, chunk, sub_chunk, video, 'video.hevc')
                 total_video_list.append(video_path)
     total_video_list.sort()
-    print(len(total_video_list))
 
     ## Multi-processing
     num_cores = 10
