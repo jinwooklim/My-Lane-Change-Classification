@@ -14,7 +14,25 @@ if not os.path.exists(image_path):
 if not os.path.exists(masked_image_path):
     os.mkdir(masked_image_path)
 
-path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-55-39/1'
+## Day Scene
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-55-39/1'
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-17-47/5'
+
+## Night Scene
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-07-27--06-03-57/6' # 35.86652295800011
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-07-27--06-50-48/8' # 17
+path ='/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_2/b0c9d2329ad1606b|2018-09-23--23-24-40/10'
+
+## Foggy Scene
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-07-29--11-17-20/4' # 80
+
+preview_img = cv2.imread(os.path.join(path, 'preview.png'))
+print(np.mean(preview_img)) # 35.86652295800011
+cv2.imshow('preview.png', preview_img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+exit()
+
 hevc_video = cv2.VideoCapture(os.path.join(path, 'video.hevc'))
 id = 0
 print("Read Video ...")
