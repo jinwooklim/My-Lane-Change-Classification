@@ -3,9 +3,9 @@ import numpy as np
 import cv2
 
 
-path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-55-39/1'
+# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-55-39/1'
 # path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-08-17--14-17-47/5'
-# path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-07-29--11-17-20/4'
+path = '/home/titan/hdd_ext/hdd2/comma2k19_ext/Chunk_1/b0c9d2329ad1606b|2018-07-29--11-17-20/4'
 
 
 def remove_previous_time(input, cut_time):
@@ -16,6 +16,28 @@ def remove_previous_time(input, cut_time):
         if(time_delta >= cut_time):
             print("After : ", len(input[j:]))
             return input[j:]
+
+
+def remove_non_synced_data(input, CAN_idx_unit):
+    idx = 0.0
+    mask = np.zeros(len(input), dtype=bool)
+    idx_list = []
+    for i in range(len(input)):
+        if int(idx) >= len(input):
+            break
+        else:
+            idx_list.append(int(idx))
+            idx += CAN_idx_unit
+    mask[idx_list] = True
+    synced = input[mask]
+    synced = synced[:1200]
+
+    # print("")
+    # print("input : ", len(input))
+    # print("mask : ", len(mask))
+    print("synced : ", len(synced))
+
+    return synced
 
 
 if __name__ == "__main__":
@@ -47,7 +69,6 @@ if __name__ == "__main__":
     '''
     78642.50749 ~ 78702.50153 == 59.994sec ~= 60sec
     1200 Frames , (25 FPS) => Total 48 sec
-    CAN data / video == 60/48 = 5/4 = 1.25
     '''
 
     cyan = (0, 0, 255)
@@ -65,13 +86,15 @@ if __name__ == "__main__":
     print("delay (ms) :", delay)
     total_delay = 0
     i = 0
-    j = 0
+    # j = 0
 
     # Remove previous time
     # print(time_and_value[0][0][0], time_and_value[-1][0][0])
     # print(time_and_value[-1][0][0] - time_and_value[0][0][0])
     # exit()
-    time_and_value = remove_previous_time(time_and_value, cut_time=12)
+    time_and_value = remove_previous_time(time_and_value, cut_time=6) # Cut previous 6 sec
+    time_and_value = remove_non_synced_data(time_and_value, CAN_idx_unit) # Save only Synced Data
+    # exit()
 
     while(hevc_video.isOpened()):
         ret, frame = hevc_video.read()
@@ -80,17 +103,18 @@ if __name__ == "__main__":
             frame_time = total_delay / 1000
 
             # CAN Time
-            CAN_time = time_and_value[j][0][0] - time_and_value[0][0][0]
+            CAN_time = time_and_value[i][0][0] - time_and_value[0][0][0]
             CAN_time = round(CAN_time, 4)
-            speed = time_and_value[j][0][1]
+            speed = time_and_value[i][0][1]
             speed = round(speed, 4)
             cv2.putText(frame, f'F_t: {frame_time} || CAN_t: {CAN_time} || Speed: {speed}', location, font, fontScale,
                         cyan, thickness)
 
             ## Show
             cv2.imshow('frame', frame)
-            i += 1
-            j += int(round(CAN_idx_unit))
+            # i += 1
+            # j += int(round(CAN_idx_unit))
+            i += 1 # remove_non_synced_data
             total_delay += delay
             if cv2.waitKey(delay) & 0xFF == ord('q'):
             # if cv2.waitKey(0) & 0xFF == ord('q'):
