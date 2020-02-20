@@ -1,4 +1,6 @@
 mask_rcnn_coco.h5
+maskRCNN_CNN_lstm_GPU.h5
+
 .pyc
 __pycache__
 .idea/
