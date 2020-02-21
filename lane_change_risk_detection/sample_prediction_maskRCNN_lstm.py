@@ -22,6 +22,6 @@ start_with_load = time.time()
 model = load_model('/hdd_ext/ssd2/PROJECT/My-Lane-Change-Classification/maskRCNN_CNN_lstm_GPU.h5')
 start = time.time()
 print(' safe | dangerous \n', model.predict_proba(data.video))
-print("time1 :", time.time() - start_with_load)
-print("time2 :", time.time() - start)
+print("time1 :", time.time() - start_with_load) # 3.7 sec
+print("time2 :", time.time() - start) # 0.8 sec
 
